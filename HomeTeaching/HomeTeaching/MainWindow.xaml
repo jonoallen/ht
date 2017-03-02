@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeTeaching"
         mc:Ignorable="d"
-        Title="Home Teaching" Height="350" Width="525">
+        DataContext="{Binding MainWindow,Source={StaticResource Locator}}"
+        Title="Home Teaching"
+        Height="600"
+        Width="825">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <DataGrid ItemsSource="{Binding People}" />
     </Grid>
 </Window>
