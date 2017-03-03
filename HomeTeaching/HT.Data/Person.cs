@@ -15,6 +15,10 @@ namespace HT.Data
         public string Email { get; set; }
         public string Mobile { get; set; }        
         public bool IsElder { get; set; }
-        public Household Household { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

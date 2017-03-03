@@ -37,22 +37,51 @@ namespace HT.Data
             people.Delete(p.ID);
         }
 
+        public void UpdatePerson(Person p)
+        {
+            people.Update(p);
+        }
+
+        public void AddHousehold(Household h)
+        {
+            households.Insert(h);
+        }
+
+        public void RemoveHousehold(Household h)
+        {
+            households.Delete(h.ID);
+        }
+
+        public void UpdateHousehold(Household h)
+        {
+            households.Update(h);
+        }
+
         private void init(LiteDatabase db)
         {
             people = db.GetCollection<Person>("people");
-            households = db.GetCollection<Household>("households");
-            assignments = db.GetCollection<Assignment>("assignments");
+
+            households = db.GetCollection<Household>("households")
+                .Include(x => x.HeadOfHouse)
+                .Include(x => x.Spouse);
+
+            assignments = db.GetCollection<Assignment>("assignments")
+                .Include(x => x.Companion1)
+                .Include(x => x.Companion2)
+                .Include(x => x.Household)
+                .Include(x => x.Actions);
 
             people.EnsureIndex(p => p.Name);
-            BsonMapper.Global.Entity<Person>()
-                .DbRef(p => p.Household, "households");
+            var mapper = BsonMapper.Global;
+            mapper.Entity<Person>()
+                .Id(p => p.ID)
+                .Index(p => p.Name, unique: true);
 
-            BsonMapper.Global.Entity<Household>()
+            mapper.Entity<Household>()
                 .DbRef(h => h.HeadOfHouse, "people")
-                .DbRef(h => h.Spouse, "people")
-                .DbRef(h => h.Children, "people");
+                .DbRef(h => h.Spouse, "people");
 
-            BsonMapper.Global.Entity<Assignment>()
+            mapper.Entity<Assignment>()
                 .DbRef(a => a.Companion1, "people")
                 .DbRef(a => a.Companion2, "people")
                 .DbRef(a => a.Household, "people");

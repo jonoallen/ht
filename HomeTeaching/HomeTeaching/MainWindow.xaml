@@ -9,18 +9,164 @@
         Title="Home Teaching"
         Height="600"
         Width="825">
+    <Window.Resources>
+        <CollectionViewSource x:Key="people"
+                              Source="{Binding People}" />
+        <CollectionViewSource x:Key="households"
+                              Source="{Binding Households}" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <ToolBarTray Grid.ColumnSpan="2">
+            <ToolBar>
+                <Button Content="Open"
+                        Width="100"
+                        Command="{Binding OpenCommand}" />
 
-        <DataGrid ItemsSource="{Binding People}" />
+                <Button Content="Save"
+                        Width="100"
+                        Command="{Binding SaveCommand}" />
+            </ToolBar>
+        </ToolBarTray>
+        <TabControl Grid.Row="1">
+            <TabItem Header="People &amp; Households">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <ScrollViewer Grid.Row="0"
+                                  Grid.RowSpan="2">
+                        <DataGrid ItemsSource="{Binding People}"
+                                  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding ID}" />
+                                <DataGridTextColumn Header="Name"
+                                                    Binding="{Binding Name}" />
+                                <DataGridTextColumn Header="Birthday"
+                                                    Binding="{Binding Birthday, StringFormat=d}" />
+                                <DataGridTextColumn Header="Email"
+                                                    Binding="{Binding Email}"
+                                                    Width="120" />
+                                <DataGridTextColumn Header="Mobile"
+                                                    Binding="{Binding Mobile}" />
+                                <DataGridCheckBoxColumn Header="Elder?"
+                                                        Binding="{Binding IsElder}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
+
+
+
+                    <GridSplitter Grid.Column="1"
+                                  Grid.RowSpan="3"
+                                  Width="5"
+                                  Background="DarkGray"
+                                  HorizontalAlignment="Stretch" />
+
+                    <Grid Grid.Row="0"
+                          Grid.Column="2"
+                          Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Head of House" />
+                        <ComboBox Grid.Row="1"
+                                  ItemsSource="{Binding People}"
+                                  SelectedItem="{Binding HeadOfHouse}"
+                                  DisplayMemberPath="Name"
+                                  Margin="5" />
+                        <TextBlock Grid.Column="1"
+                                   Text="Spouse" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="1"
+                                  ItemsSource="{Binding People}"
+                                  SelectedItem="{Binding Spouse}"
+                                  DisplayMemberPath="Name"
+                                  Margin="5" />
+                        <Button Content="Create New Household"
+                                Grid.Row="2"
+                                Grid.ColumnSpan="2"
+                                Margin="5"
+                                Command="{Binding NewHouseholdCommand}" />
+                    </Grid>
+
+                    <ScrollViewer Grid.Column="2"
+                                  Grid.Row="1">
+                        <ListBox ItemsSource="{Binding Households}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander Header="{Binding HeadOfHouse.Name}">
+                                        <StackPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding HeadOfHouse.Name}"
+                                                           FontWeight="Black"
+                                                           Margin="5"
+                                                           Grid.Column="0" />
+                                                <TextBlock Text="{Binding Spouse.Name}"
+                                                           Margin="5"
+                                                           Grid.Column="1" />
+                                                <Button Content="Delete Household"
+                                                        Grid.Column="2"
+                                                        HorizontalAlignment="Right"
+                                                        Command="{Binding DeleteHousehold}" />
+
+                                                <TextBlock Text="Address"
+                                                           Grid.Row="1"
+                                                           Margin="5" />
+
+                                                <TextBox Text="{Binding Address}"
+                                                         Grid.Row="1"
+                                                         Grid.Column="0"
+                                                         Grid.ColumnSpan="3"
+                                                         Margin="75,5,0,5" />
+                                            </Grid>
+                                            <DataGrid ItemsSource="{Binding Children}"
+                                                      AutoGenerateColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Name"
+                                                                        Binding="{Binding Name}" />
+                                                    <DataGridTextColumn Header="Birthday"
+                                                                        Binding="{Binding Birthday, StringFormat=d}" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
+                                    </Expander>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Assignments">
+                <TextBlock Text="More to come..." />
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

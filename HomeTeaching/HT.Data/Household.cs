@@ -5,9 +5,10 @@ namespace HT.Data
 {
     public class Household
     {
-        public int Id { get; }
+        public int ID { get; set; }
         public Person HeadOfHouse { get; set; }
         public Person Spouse { get; set; }
+        public string Address { get; set; }
         public List<Person> Children { get; set; }
 
         public Household()
